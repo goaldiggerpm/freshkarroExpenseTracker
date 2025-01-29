@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useRouter } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
+
 const formSchema = z.object({
     username: z.string().min(2, {
         message: "Username must be at least 2 characters.",
@@ -26,6 +28,7 @@ const formSchema = z.object({
 })
 
 export function ProfileForm() {
+    const router = useRouter()
     // 1. Define your form.
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -36,10 +39,31 @@ export function ProfileForm() {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
+    async function onSubmit(values) {
         console.log(values)
+        try {
+            // Form values are already processed by react-hook-form
+            const formData = {
+                username: values.username,
+                password: values.password
+            }
+
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+
+            if (!response.ok) {
+                throw new Error('Login failed')
+            }
+
+            // Navigate on success
+            router.push('/home')
+        } catch (error) {
+            console.error('Login error:', error)
+            // Handle error (show toast, error message, etc)
+        }
     }
 
     return (

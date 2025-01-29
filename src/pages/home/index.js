@@ -1,27 +1,39 @@
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
     const [data, setData] = useState(null)
+    const router = useRouter()
 
     useEffect(() => {
-        async function fetchData() {
-            const { data, error } = await supabase
-                .from('your_table')
-                .select('*')
-
-            if (error) console.log('Error:', error)
-            else setData(data)
-        }
-
-        fetchData()
+        // Fetch data or perform client-side operations here
     }, [])
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+
+            if (!response.ok) {
+                throw new Error('Logout failed')
+            }
+
+            const result = await response.json()
+
+            // Redirect to home page after logout
+            router.push(result.redirectTo)
+        } catch (error) {
+            console.error('Logout error:', error)
+            // Handle error (show toast, error message, etc)
+        }
+    }
 
     return (
         <div>
-            <Button>Click me</Button>
-            {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+            <Button onClick={handleLogout}>Logout</Button>
         </div>
     )
 }
