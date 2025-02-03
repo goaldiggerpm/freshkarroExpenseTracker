@@ -34,8 +34,8 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
             <DrawerContent >
                 <div className="mx-auto h-full w-full max-w-sm overflow-y-auto ">
                     <DrawerHeader>
-                        <DrawerTitle>Expense</DrawerTitle>
-                        <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                        <DrawerTitle>Expense Receipt</DrawerTitle>
+                        <DrawerDescription>Created by {expensedata?.user_id}</DrawerDescription>
                     </DrawerHeader>
 
                     <div className="mt-3 h-[120px] ">
