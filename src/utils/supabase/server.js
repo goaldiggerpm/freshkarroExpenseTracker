@@ -1,7 +1,7 @@
 const { createServerClient } = require('@supabase/ssr');
 const { cookies } = require('next/headers');
 
-async function createClient() {
+export default async function createClient() {
     const cookieStore = await cookies();
 
     return createServerClient(
@@ -28,4 +28,4 @@ async function createClient() {
     );
 }
 
-module.exports = { createClient };
+// module.exports = { createClient };

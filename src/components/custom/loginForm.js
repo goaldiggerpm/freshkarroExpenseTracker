@@ -27,7 +27,7 @@ const formSchema = z.object({
     })
 })
 
-export function ProfileForm() {
+export function LoginForm() {
     const router = useRouter()
     // 1. Define your form.
     const form = useForm({

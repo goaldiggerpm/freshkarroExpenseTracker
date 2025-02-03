@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import createClient from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -29,15 +29,9 @@ export async function POST(request) {
             )
         }
 
-        cookies().set('username', username, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            path: '/',
-            maxAge: 60 * 60 // 1 hour
-        })
-
-        cookies().set('password', password, {
+        // Set session cookie
+        const cookieStore = await cookies()
+        cookieStore.set('session', JSON.stringify({ username, password }), {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
@@ -47,7 +41,7 @@ export async function POST(request) {
 
         return NextResponse.json({
             success: true,
-            redirectTo: '/home'
+            redirectTo: '/view'
         })
 
     } catch (error) {
