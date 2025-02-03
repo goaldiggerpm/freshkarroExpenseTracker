@@ -1,10 +1,11 @@
 "use client"
 
-import React, { forwardRef } from "react"
-import { Minus, Plus } from "lucide-react"
-import { Bar, BarChart, ResponsiveContainer } from "recharts"
+import React, { forwardRef, useEffect, useState } from "react"
+import { ResponsiveContainer } from "recharts"
+// import { useRouter } from 'next/router';
 
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/hooks/use-toast"
 import {
     Drawer,
     DrawerClose,
@@ -19,12 +20,71 @@ import {
 
 const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
     // const [goal, setGoal] = React.useState(350)
+    const [edit, setedit] = useState(false)
+    const [selectedData, setselectedData] = useState({})
+    const [editedData, setEditedData] = useState(expensedata);
 
-    // function onClick(adjustment) {
-    //     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
-    // }
+    useEffect(() => {
+        setselectedData(expensedata);
+        setEditedData(expensedata);
+    }, [expensedata]);
 
-    console.log('data', expensedata)
+    const { toast } = useToast()
+
+    function handleEdit() {
+        setedit(!edit)
+        // setEditedData(selectedData)
+    }
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setEditedData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
+
+    useEffect(() => {
+        if (editedData === selectedData) {
+            return;
+        }
+        setselectedData(editedData);
+        if (!edit) {
+            editExpense();
+        }
+    }, [edit]);
+
+    async function editExpense() {
+        console.log('im called expense')
+        try {
+            const response = await fetch('/api/data/expenses', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editedData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            console.log('Expense updated successfully:', result);
+            toast({
+                description: "Expense updated successfully"
+            });
+            // handleReload();
+        } catch (error) {
+            console.error('Error updating expense:', error);
+        }
+    }
+
+    function handleDrawerClose() {
+        setedit(false);
+        setselectedData({});
+        setEditedData({});
+    }
 
     return (
         <Drawer>
@@ -41,57 +101,102 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                     <div className="mt-3 h-[120px] ">
                         <ResponsiveContainer width="100%" height="100%">
                             <div className="expense-container">
-                                <h2>Expense Details</h2>
-                                <div>
-                                    <span>Expense ID:</span> {expensedata?.expense_id}
-                                </div>
-                                <div>
-                                    <span>User ID:</span> {expensedata?.user_id}
-                                </div>
-                                <div>
-                                    <span>Expense Type:</span> {expensedata?.expense_type}
-                                </div>
-                                <div>
-                                    <span>Reason:</span> {expensedata?.reason}
-                                </div>
-                                <div>
-                                    <span>Expense Date:</span> {expensedata?.expense_date}
-                                </div>
-                                <div>
-                                    <span>Amount:</span> {expensedata?.amount}
-                                </div>
-                                <div>
-                                    <span>Platform Used:</span> {expensedata?.platform_used}
-                                </div>
-                                <div>
-                                    <span>Payment Reference ID:</span> {expensedata?.payment_reference_id}
-                                </div>
-                                <div>
-                                    <span>Entered By:</span> {expensedata?.entered_by}
-                                </div>
-                                <div>
-                                    <span>Updated By:</span> {expensedata?.updated_by}
-                                </div>
-                                <div>
-                                    <span>Entered Date:</span> {expensedata?.entered_date}
-                                </div>
-                                <div>
-                                    <span>Updated Date:</span> {expensedata?.updated_date}
-                                </div>
-                                <div>
-                                    <span>Is Deleted:</span> {expensedata?.is_deleted ? 'Yes' : 'No'}
-                                </div>
+                                {edit ? (
+                                    <>
+                                        <div className="text-red-400" >Editing</div>
+                                        <div>
+                                            <span>Expense ID:</span> <input name="expense_id" value={editedData.expense_id} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>User ID:</span> <input name="user_id" value={editedData.user_id} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Expense Type:</span> <input name="expense_type" value={editedData.expense_type} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Reason:</span> <input name="reason" value={editedData.reason} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Expense Date:</span> <input name="expense_date" value={editedData.expense_date} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Amount:</span> <input name="amount" value={editedData.amount} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Platform Used:</span> <input name="platform_used" value={editedData.platform_used} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Payment Reference ID:</span> <input name="payment_reference_id" value={editedData.payment_reference_id} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Entered By:</span> <input name="entered_by" value={editedData.entered_by} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Updated By:</span> <input name="updated_by" value={editedData.updated_by} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Entered Date:</span> <input name="entered_date" value={editedData.entered_date} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Updated Date:</span> <input name="updated_date" value={editedData.updated_date} onChange={handleChange} />
+                                        </div>
+                                        <div>
+                                            <span>Is Deleted:</span> <input name="is_deleted" value={editedData.is_deleted ? 'Yes' : 'No'} onChange={handleChange} />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div>
+                                            <span>Expense ID:</span> {selectedData?.expense_id}
+                                        </div>
+                                        <div>
+                                            <span>User ID:</span> {selectedData?.user_id}
+                                        </div>
+                                        <div>
+                                            <span>Expense Type:</span> {selectedData?.expense_type}
+                                        </div>
+                                        <div>
+                                            <span>Reason:</span> {selectedData?.reason}
+                                        </div>
+                                        <div>
+                                            <span>Expense Date:</span> {selectedData?.expense_date}
+                                        </div>
+                                        <div>
+                                            <span>Amount:</span> {selectedData?.amount}
+                                        </div>
+                                        <div>
+                                            <span>Platform Used:</span> {selectedData?.platform_used}
+                                        </div>
+                                        <div>
+                                            <span>Payment Reference ID:</span> {selectedData?.payment_reference_id}
+                                        </div>
+                                        <div>
+                                            <span>Entered By:</span> {selectedData?.entered_by}
+                                        </div>
+                                        <div>
+                                            <span>Updated By:</span> {selectedData?.updated_by}
+                                        </div>
+                                        <div>
+                                            <span>Entered Date:</span> {selectedData?.entered_date}
+                                        </div>
+                                        <div>
+                                            <span>Updated Date:</span> {selectedData?.updated_date}
+                                        </div>
+                                        <div>
+                                            <span>Is Deleted:</span> {selectedData?.is_deleted ? 'Yes' : 'No'}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </ResponsiveContainer>
                     </div>
                 </div>
                 <DrawerFooter>
-                    {/* <Button>Submit</Button> */}
-                    <DrawerClose asChild>
+                    <Button onClick={handleEdit}>{edit ? 'Save' : 'Edit'}</Button>
+                    <DrawerClose asChild onClick={handleDrawerClose} >
                         <Button variant="outline">Close</Button>
                     </DrawerClose>
                 </DrawerFooter>
-
             </DrawerContent>
         </Drawer>
     )
