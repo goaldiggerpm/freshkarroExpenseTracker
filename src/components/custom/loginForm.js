@@ -59,7 +59,7 @@ export function LoginForm() {
             }
 
             // Navigate on success
-            router.push('/home')
+            router.push('/view')
         } catch (error) {
             console.error('Login error:', error)
             // Handle error (show toast, error message, etc)

@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import ExpenseTable from '@/components/custom/expenseTable'
 
 import "../../app/globals.css";
+import { useRouter } from 'next/router';
 
 
 export default function View(props) {
+    const router = useRouter()
     const [expenses, setExpenses] = useState([{
         "expense_id": 123,
         "user_id": "Prince_M",
@@ -75,6 +77,10 @@ export default function View(props) {
             console.error('Logout error:', error)
             // Handle error (show toast, error message, etc)
         }
+    }
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage)
     }
 
     return (
