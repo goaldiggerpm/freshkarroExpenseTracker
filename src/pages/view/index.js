@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import ExpenseTable from '@/components/custom/expenseTable'
+
 import "../../app/globals.css";
 
 
@@ -23,16 +24,22 @@ export default function View(props) {
         "updated_date": "2025-01-29T21:16:59+00:00",
         "is_deleted": false
     }])
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
 
     useEffect(() => {
-        fetchExpenses()
-            .then(data => setExpenses(data))
-            .catch(error => console.error('Error fetching expenses:', error))
-    }, [])
+        const getExpenses = async () => {
+            const { data, page: currentPage, totalPages: total } = await fetchExpenses(page)
+            setExpenses(data)
+            setPage(currentPage)
+            setTotalPages(total)
+        }
+        getExpenses()
+    }, [page])
 
     async function fetchExpenses() {
         try {
-            const response = await fetch('/api/data/expenses', {
+            const response = await fetch(`/api/data/expenses?page=${page}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -42,11 +49,10 @@ export default function View(props) {
             }
 
             const data = await response.json()
-            console.log('from expense', data)
             return data
         } catch (error) {
             console.error('Error fetching expenses:', error)
-            return []
+            return { data: [], page: 1, totalPages: 1 }
         }
     }
 
@@ -73,11 +79,28 @@ export default function View(props) {
 
     return (
         <div className='w-auto p-4'>
-            <div className='flex flex-row gap-10 p-2'>
-                <Button className="mr-auto" variant='add' >Add</Button>
-                <Button className="mr-auto rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
+            <div className='flex justify-end items-center gap-2 p-2'>
+                <Button className="" variant='add' >Add</Button>
+                <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
             </div>
             <ExpenseTable expenses={expenses} />
+            <div className="flex justify-center items-center mt-4">
+                <Button
+                    variant="outline"
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page <= 1}
+                >
+                    Previous
+                </Button>
+                <span className="mx-4">Page {page} of {totalPages}</span>
+                <Button
+                    variant="outline"
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={page >= totalPages}
+                >
+                    Next
+                </Button>
+            </div>
         </div>
     )
 }

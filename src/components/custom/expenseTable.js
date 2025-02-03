@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import { createClient } from '@/utils/supabase/server';
 
 import {
     Table,
@@ -35,7 +34,7 @@ const ExpenseTable = ({ expenses }) => {
     return (
         <div>
             <Table className="">
-                <TableCaption className="mt-4 text-sm text-muted-foreground" >A list of your recent invoices.</TableCaption>
+                {/* <TableCaption className="mt-4 text-sm text-muted-foreground" >A list of your recent invoices.</TableCaption> */}
                 <TableHeader className="[&_tr]:border-b" >
                     <TableRow className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                         <TableHead className="w-[100px]">User ID</TableHead>
@@ -54,12 +53,12 @@ const ExpenseTable = ({ expenses }) => {
                         </TableRow>
                     ))}
                 </TableBody>
-                <TableFooter>
+                {/* <TableFooter>
                     <TableRow>
                         <TableCell colSpan={3}>Total</TableCell>
                         <TableCell className="text-right">₹2,500.00</TableCell>
                     </TableRow>
-                </TableFooter>
+                </TableFooter> */}
             </Table>
             <ExpenseDrawer ref={drawerTriggerRef} expensedata={selectedExpense} show={false} />
         </div>
