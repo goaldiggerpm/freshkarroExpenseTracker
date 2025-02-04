@@ -10,29 +10,17 @@ import { useRouter } from 'next/router';
 import { ExpenseAddDrawer } from '@/components/custom/expenseAddDrawer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/components/hooks/use-toast';
+import { CircleLoader } from '@/components/custom/circleLoader';
 
 
 export default function View(props) {
     const router = useRouter()
-    const [expenses, setExpenses] = useState([{
-        "expense_id": 123,
-        "user_id": "Prince_M",
-        "expense_type": "Food",
-        "reason": "Travelling say bhuk lagi",
-        "expense_date": "2025-01-30",
-        "amount": 234,
-        "platform_used": "Gpay",
-        "payment_reference_id": "asdfqwe3345",
-        "entered_by": "Prince_M",
-        "updated_by": "Prince_M",
-        "entered_date": "2025-01-29T21:16:55+00:00",
-        "updated_date": "2025-01-29T21:16:59+00:00",
-        "is_deleted": false
-    }])
+    const [expenses, setExpenses] = useState([{}])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
+    const [loading, setloading] = useState(false)
 
 
     useEffect(() => {
@@ -57,12 +45,15 @@ export default function View(props) {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
-
+            setloading(true)
             if (!response.ok) {
                 throw new Error('Failed to fetch expenses')
             }
 
             const data = await response.json()
+            setTimeout(() => {
+                setloading(false)
+            }, 100);
             return data
         } catch (error) {
             console.error('Error fetching expenses:', error)
@@ -109,32 +100,43 @@ export default function View(props) {
     }
 
     return (
-        <div className='w-auto p-4 font-[family-name:var(--font-geist-sans)] text-lg'>
-            <div className='flex justify-end items-center gap-2 p-2'>
-                <Button className="" variant='add' onClick={handleRowClick} >Add </Button>
-                <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
-            </div>
-            <ExpenseTable expenses={expenses} />
-            <div className="flex justify-center items-center mt-4">
-                <Button
-                    className="rounded-full"
-                    variant="outline"
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page <= 1}
-                >
-                    <ChevronLeft />
-                </Button>
-                <span className="mx-4">Page {page} of {totalPages}</span>
-                <Button
-                    className="rounded-full"
-                    variant="outline"
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={page >= totalPages}
-                >
-                    <ChevronRight />
-                </Button>
-            </div>
-            <ExpenseAddDrawer ref={drawerTriggerRef} show={false} username={username} />
-        </div>
+        <React.Fragment>
+            {
+                loading ?
+                    <CircleLoader />
+                    :
+                    <div className='flex justify-center items-center h-full'>
+                        {
+                            !loading && <div className='w-auto p-4 font-[family-name:var(--font-geist-sans)] text-lg'>
+                                <div className='flex justify-end items-center gap-2 p-2'>
+                                    <Button className="" variant='add' onClick={handleRowClick} >Add </Button>
+                                    <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
+                                </div>
+                                <ExpenseTable expenses={expenses} />
+                                <div className="flex justify-center items-center mt-4">
+                                    <Button
+                                        className="rounded-full"
+                                        variant="outline"
+                                        onClick={() => handlePageChange(page - 1)}
+                                        disabled={page <= 1}
+                                    >
+                                        <ChevronLeft />
+                                    </Button>
+                                    <span className="mx-4">Page {page} of {totalPages}</span>
+                                    <Button
+                                        className="rounded-full"
+                                        variant="outline"
+                                        onClick={() => handlePageChange(page + 1)}
+                                        disabled={page >= totalPages}
+                                    >
+                                        <ChevronRight />
+                                    </Button>
+                                </div>
+                                <ExpenseAddDrawer ref={drawerTriggerRef} show={false} username={username} />
+                            </div>
+                        }
+                    </div>
+            }
+        </ React.Fragment>
     )
 }
