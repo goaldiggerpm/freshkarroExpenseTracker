@@ -2,21 +2,10 @@
 
 import React, { forwardRef, useEffect, useState } from "react"
 import { useRouter } from 'next/navigation';
-import {
-    getCookie,
-    getCookies,
-    setCookie,
-    deleteCookie,
-    hasCookie,
-    useGetCookies,
-    useSetCookie,
-    useHasCookie,
-    useDeleteCookie,
-    useGetCookie,
-} from 'cookies-next/client';
 
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/hooks/use-toast"
+import { toast } from 'sonner'
+
 
 import {
     Drawer,
@@ -48,8 +37,6 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
         is_deleted: false
     });
     const router = useRouter();
-
-    const { toast } = useToast()
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -100,11 +87,11 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
 
                 const result = await response.json();
                 if (result) {
-                    router.refresh();
+                    toast.success("Expense added successfully");
+                    setTimeout(() => {
+                        router.refresh();
+                    }, 3000);
                 }
-                toast({
-                    description: "Expense added successfully"
-                });
             } catch (error) {
                 console.error('Error adding expense:', error);
             }

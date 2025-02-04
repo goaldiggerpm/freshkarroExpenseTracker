@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    // FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { toast } from 'sonner'
 
 
 const formSchema = z.object({
@@ -53,6 +53,12 @@ export function LoginForm() {
                 body: JSON.stringify(formData)
             })
 
+            if (response.status === 401) {
+                console.log('Invalid credentials');
+                toast.error("Invalid credentials");
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error('Login failed')
             }
@@ -60,6 +66,7 @@ export function LoginForm() {
             // Navigate on success
             router.push('/view')
         } catch (error) {
+
             console.error('Login error:', error)
             // Handle error (show toast, error message, etc)
         }
@@ -100,7 +107,7 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" >Submit</Button>
             </form>
         </Form>
     )
