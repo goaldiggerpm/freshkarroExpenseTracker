@@ -72,7 +72,6 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
     }, []);
 
     function isFormValid() {
-        console.log(enteredData)
         for (let key in enteredData) {
             if (enteredData[key] === '' || enteredData[key] === null || enteredData[key] === undefined) {
                 return false;
@@ -83,7 +82,6 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
 
     async function addExpense(e) {
         e.preventDefault()
-        console.log('im called add expense')
         if (isFormValid()) {
             try {
                 const response = await fetch('/api/data/expenses', {
@@ -101,7 +99,6 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
                 }
 
                 const result = await response.json();
-                console.log('Expense added successfully:', result);
                 if (result) {
                     router.refresh();
                 }
@@ -115,7 +112,6 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
     }
 
     function handleDrawerClose() {
-        console.log('state cleared')
         const currentDate = new Date().toISOString().split('T')[0];
         setEnteredData({
             expense_id: 'any',

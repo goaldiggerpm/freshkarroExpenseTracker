@@ -22,8 +22,6 @@ const ExpenseTable = ({ expenses }) => {
 
     const handleRowClick = (expense) => {
         setselectedExpense(expense)
-        console.log(expenseData)
-        console.log(expense)
         if (drawerTriggerRef.current) {
             drawerTriggerRef.current.click()
         }

@@ -38,7 +38,6 @@ export default function View(props) {
     useEffect(() => {
         const getExpenses = async () => {
             const { data, page: currentPage, totalPages: total, username } = await fetchExpenses(page)
-            console.log('username', username)
             setUserName(username)
             setExpenses(data)
             setPage(currentPage)

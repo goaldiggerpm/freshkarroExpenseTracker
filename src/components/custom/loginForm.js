@@ -40,7 +40,6 @@ export function LoginForm() {
 
     // 2. Define a submit handler.
     async function onSubmit(values) {
-        console.log(values)
         try {
             // Form values are already processed by react-hook-form
             const formData = {

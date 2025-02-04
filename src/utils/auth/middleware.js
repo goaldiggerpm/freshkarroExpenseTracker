@@ -15,8 +15,6 @@ export async function middleware(req) {
 
     const isPublicRoute = PUBLIC_ROUTES.includes(req.nextUrl.pathname)
 
-    console.log(username, password)
-
     if (!isPublicRoute) {
         // Check if user exists in database
         const { data: user, error } = await supabase

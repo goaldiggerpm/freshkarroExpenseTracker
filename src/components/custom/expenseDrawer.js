@@ -58,7 +58,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
 
     async function editExpense(e) {
         e.preventDefault()
-        console.log('im called expense')
         try {
             const response = await fetch('/api/data/expenses', {
                 method: 'PUT',
@@ -73,7 +72,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
             }
 
             const result = await response.json();
-            console.log('Expense updated successfully:', result);
             if (result) {
                 router.refresh();
             }
@@ -87,7 +85,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
     }
 
     function handleDrawerClose() {
-        console.log('state cleared')
         setedit(false);
         setselectedData({});
         setEditedData({
