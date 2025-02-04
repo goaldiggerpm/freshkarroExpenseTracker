@@ -2,9 +2,22 @@
 
 import React, { forwardRef, useEffect, useState } from "react"
 import { useRouter } from 'next/navigation';
+import {
+    getCookie,
+    getCookies,
+    setCookie,
+    deleteCookie,
+    hasCookie,
+    useGetCookies,
+    useSetCookie,
+    useHasCookie,
+    useDeleteCookie,
+    useGetCookie,
+} from 'cookies-next/client';
 
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/hooks/use-toast"
+
 import {
     Drawer,
     DrawerClose,
@@ -15,12 +28,13 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
+import { Input } from "../ui/input";
 
 
-const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
+const ExpenseAddDrawer = forwardRef((props, ref) => {
     const [enteredData, setEnteredData] = useState({
-        expense_id: '',
-        user_id: '',
+        expense_id: 'any',
+        user_id: props.username,
         expense_type: '',
         reason: '',
         expense_date: '',
@@ -45,7 +59,20 @@ const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
         }));
     }
 
+    useEffect(() => {
+        const currentDate = new Date().toISOString().split('T')[0];
+        setEnteredData(prevState => ({
+            ...prevState,
+            user_id: props.username,
+            entered_by: props.username,
+            updated_by: props.username,
+            entered_date: currentDate,
+            updated_date: currentDate
+        }));
+    }, []);
+
     function isFormValid() {
+        console.log(enteredData)
         for (let key in enteredData) {
             if (enteredData[key] === '' || enteredData[key] === null || enteredData[key] === undefined) {
                 return false;
@@ -68,6 +95,8 @@ const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
                 });
 
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error response:', response.status, errorText);
                     throw new Error('Network response was not ok');
                 }
 
@@ -87,19 +116,20 @@ const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
 
     function handleDrawerClose() {
         console.log('state cleared')
+        const currentDate = new Date().toISOString().split('T')[0];
         setEnteredData({
-            expense_id: '',
-            user_id: '',
+            expense_id: 'any',
+            user_id: props.username,
             expense_type: '',
             reason: '',
             expense_date: '',
             amount: '',
             platform_used: '',
             payment_reference_id: '',
-            entered_by: '',
-            updated_by: '',
-            entered_date: '',
-            updated_date: '',
+            entered_by: props.username,
+            updated_by: props.username,
+            entered_date: currentDate,
+            updated_date: currentDate,
             is_deleted: false
         });
     }
@@ -113,46 +143,46 @@ const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
                 <div className="mx-auto h-full w-full max-w-sm overflow-y-auto">
                     <DrawerHeader>
                         <DrawerTitle className="text-lg">Expense Receipt</DrawerTitle>
-                        <DrawerDescription className="text-lg">Created by {expensedata?.user_id}</DrawerDescription>
+                        <DrawerDescription className="text-lg">New Form</DrawerDescription>
                     </DrawerHeader>
 
                     <div className="mt-3">
                         <div className="expense-container">
                             <div className="text-red-400 text-lg">Adding</div>
                             <form id="expense-form" onSubmit={addExpense} className="space-y-4">
-                                <div className="text-lg flex flex-col">
+                                {/* <div className="text-lg flex flex-col m-2">
                                     <span>Expense ID:</span>
-                                    <input name="expense_id" value={enteredData.expense_id} onChange={handleChange} />
-                                </div>
-                                <div className="text-lg flex flex-col">
+                                    <Input name="expense_id" value={enteredData.expense_id} onChange={handleChange} />
+                                </div> */}
+                                <div className="text-lg flex flex-col m-2">
                                     <span>User ID:</span>
-                                    <input name="user_id" value={enteredData.user_id} onChange={handleChange} />
+                                    <Input name="user_id" value={enteredData.user_id} onChange={handleChange} readOnly />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Expense Type:</span>
-                                    <input name="expense_type" value={enteredData.expense_type} onChange={handleChange} />
+                                    <Input name="expense_type" value={enteredData.expense_type} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Reason:</span>
-                                    <input name="reason" value={enteredData.reason} onChange={handleChange} />
+                                    <Input name="reason" value={enteredData.reason} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Expense Date:</span>
-                                    <input name="expense_date" value={enteredData.expense_date} onChange={handleChange} />
+                                    <Input name="expense_date" type="date" value={enteredData.expense_date} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Amount:</span>
-                                    <input name="amount" value={enteredData.amount} onChange={handleChange} />
+                                    <Input name="amount" value={enteredData.amount} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Platform Used:</span>
-                                    <input name="platform_used" value={enteredData.platform_used} onChange={handleChange} />
+                                    <Input name="platform_used" value={enteredData.platform_used} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                <div className="text-lg flex flex-col m-2">
                                     <span>Payment Reference ID:</span>
-                                    <input name="payment_reference_id" value={enteredData.payment_reference_id} onChange={handleChange} />
+                                    <Input name="payment_reference_id" value={enteredData.payment_reference_id} onChange={handleChange} />
                                 </div>
-                                <div className="text-lg flex flex-col">
+                                {/* <div className="text-lg flex flex-col">
                                     <span>Entered By:</span>
                                     <input name="entered_by" value={enteredData.entered_by} onChange={handleChange} />
                                 </div>
@@ -171,7 +201,7 @@ const ExpenseAddDrawer = forwardRef(({ expensedata }, ref) => {
                                 <div className="text-lg flex flex-col">
                                     <span>Is Deleted:</span>
                                     <input name="is_deleted" value={enteredData.is_deleted} placeholder="Type yes or no" onChange={handleChange} />
-                                </div>
+                                </div> */}
                                 <Button className="mt-4 hidden" type="submit">Submit</Button>
                             </form>
                         </div>

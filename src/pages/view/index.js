@@ -8,6 +8,8 @@ import ExpenseTable from '@/components/custom/expenseTable'
 import "../../app/globals.css";
 import { useRouter } from 'next/router';
 import { ExpenseAddDrawer } from '@/components/custom/expenseAddDrawer';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from '@/components/hooks/use-toast';
 
 
 export default function View(props) {
@@ -29,18 +31,26 @@ export default function View(props) {
     }])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
+    const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
 
 
     useEffect(() => {
         const getExpenses = async () => {
-            const { data, page: currentPage, totalPages: total } = await fetchExpenses(page)
+            const { data, page: currentPage, totalPages: total, username } = await fetchExpenses(page)
+            console.log('username', username)
+            setUserName(username)
             setExpenses(data)
             setPage(currentPage)
             setTotalPages(total)
+            if (username === '' || username === null || username === undefined) {
+                await handleLogout('login')
+            }
         }
+
         getExpenses()
     }, [page])
+
 
     async function fetchExpenses() {
         try {
@@ -57,11 +67,11 @@ export default function View(props) {
             return data
         } catch (error) {
             console.error('Error fetching expenses:', error)
-            return { data: [], page: 1, totalPages: 1 }
+            return { data: [], page: 1, totalPages: 1, username }
         }
     }
 
-    const handleLogout = async () => {
+    const handleLogout = async (val) => {
         try {
             const response = await fetch('/api/auth/logout', {
                 method: 'POST',
@@ -73,6 +83,12 @@ export default function View(props) {
             }
 
             const result = await response.json()
+
+            if (val === 'login') {
+                toast('Please login to view expenses')
+                router.push(result.redirectTo)
+                return
+            }
 
             // Redirect to home page after logout
             router.push(result.redirectTo)
@@ -94,30 +110,32 @@ export default function View(props) {
     }
 
     return (
-        <div className='w-auto p-4'>
+        <div className='w-auto p-4 font-[family-name:var(--font-geist-sans)] text-lg'>
             <div className='flex justify-end items-center gap-2 p-2'>
-                <Button className="" variant='add' onClick={handleRowClick} >Add</Button>
+                <Button className="" variant='add' onClick={handleRowClick} >Add </Button>
                 <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
             </div>
             <ExpenseTable expenses={expenses} />
             <div className="flex justify-center items-center mt-4">
                 <Button
+                    className="rounded-full"
                     variant="outline"
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page <= 1}
                 >
-                    Previous
+                    <ChevronLeft />
                 </Button>
                 <span className="mx-4">Page {page} of {totalPages}</span>
                 <Button
+                    className="rounded-full"
                     variant="outline"
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page >= totalPages}
                 >
-                    Next
+                    <ChevronRight />
                 </Button>
             </div>
-            <ExpenseAddDrawer ref={drawerTriggerRef} show={false} />
+            <ExpenseAddDrawer ref={drawerTriggerRef} show={false} username={username} />
         </div>
     )
 }

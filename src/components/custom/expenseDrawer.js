@@ -16,6 +16,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
+import { Input } from "../ui/input";
 
 
 const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
@@ -124,89 +125,97 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                 <>
                                     <div className="text-red-400" >Editing</div>
                                     <form id="expense-form" onSubmit={editExpense}>
-                                        <div>
-                                            <span>Expense ID:</span> <input name="expense_id" value={editedData.expense_id} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Expense ID:</span>
+                                            <Input name="expense_id" value={editedData.expense_id} onChange={handleChange} readOnly />
                                         </div>
-                                        <div>
-                                            <span>User ID:</span> <input name="user_id" value={editedData.user_id} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>User ID:</span>
+                                            <Input name="user_id" value={editedData.user_id} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Expense Type:</span> <input name="expense_type" value={editedData.expense_type} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Expense Type:</span>
+                                            <Input name="expense_type" value={editedData.expense_type} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Reason:</span> <input name="reason" value={editedData.reason} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Reason:</span>
+                                            <Input name="reason" value={editedData.reason} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Expense Date:</span> <input name="expense_date" value={editedData.expense_date} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Expense Date:</span>
+                                            <Input name="expense_date" value={editedData.expense_date} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Amount:</span> <input name="amount" value={editedData.amount} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Amount:</span>
+                                            <Input name="amount" value={editedData.amount} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Platform Used:</span> <input name="platform_used" value={editedData.platform_used} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Platform Used:</span>
+                                            <Input name="platform_used" value={editedData.platform_used} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <span>Payment Reference ID:</span> <input name="payment_reference_id" value={editedData.payment_reference_id} onChange={handleChange} />
+                                        <div className="text-lg flex flex-col m-2">
+                                            <span>Payment Reference ID:</span>
+                                            <Input name="payment_reference_id" value={editedData.payment_reference_id} onChange={handleChange} />
                                         </div>
-                                        <div>
+                                        {/* <div className="text-lg flex flex-col m-2">
                                             <span>Entered By:</span> <input name="entered_by" value={editedData.entered_by} onChange={handleChange} />
                                         </div>
-                                        <div>
+                                        <div className="text-lg flex flex-col m-2">
                                             <span>Updated By:</span> <input name="updated_by" value={editedData.updated_by} onChange={handleChange} />
                                         </div>
-                                        <div>
+                                        <div className="text-lg flex flex-col m-2">
                                             <span>Entered Date:</span> <input name="entered_date" value={editedData.entered_date} onChange={handleChange} />
                                         </div>
-                                        <div>
+                                        <div className="text-lg flex flex-col m-2">
                                             <span>Updated Date:</span> <input name="updated_date" value={editedData.updated_date} onChange={handleChange} />
-                                        </div>
-                                        <div>
+                                        </div> */}
+                                        {/* <div className="text-lg flex flex-col m-2">
                                             <span>Is Deleted:</span> <input name="is_deleted" placeholder="Type yes or no" value={editedData.is_deleted ? "Yes" : "No"} onChange={handleChange} tooltip="Say yes or no" />
-                                        </div>
+                                        </div> */}
                                         <Button className="mt-4 hidden" type="submit">Submit</Button>
                                     </form>
                                 </>
                             ) : (
                                 <>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Expense ID:</span> {selectedData?.expense_id}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>User ID:</span> {selectedData?.user_id}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Expense Type:</span> {selectedData?.expense_type}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Reason:</span> {selectedData?.reason}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Expense Date:</span> {selectedData?.expense_date}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Amount:</span> {selectedData?.amount}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Platform Used:</span> {selectedData?.platform_used}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Payment Reference ID:</span> {selectedData?.payment_reference_id}
                                     </div>
-                                    <div>
+                                    {/* <div className="text-lg flex flex-col m-2" >
                                         <span>Entered By:</span> {selectedData?.entered_by}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Updated By:</span> {selectedData?.updated_by}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Entered Date:</span> {selectedData?.entered_date}
                                     </div>
-                                    <div>
+                                    <div className="text-lg flex flex-col m-2" >
                                         <span>Updated Date:</span> {selectedData?.updated_date}
-                                    </div>
-                                    <div>
+                                    </div> */}
+                                    {/* <div className="text-lg flex flex-col m-2" >
                                         <span>Is Deleted:</span> {selectedData?.is_deleted ? 'Yes' : 'No'}
-                                    </div>
+                                    </div> */}
                                 </>
                             )}
                         </div>
