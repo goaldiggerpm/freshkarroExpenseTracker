@@ -13,7 +13,6 @@ export async function GET(req, res) {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get('session');
     const username = sessionCookie ? JSON.parse(sessionCookie.value).username : null;
-    console.log(username)
     if (!username) {
         return NextResponse.redirect(new URL('/', req.url));
     }
@@ -46,7 +45,6 @@ export async function GET(req, res) {
 
 export async function PUT(req, res) {
     const { expense_id, ...updates } = await req.json();
-    console.log('updates here api', updates)
 
     try {
         const supabase = await createClient();
