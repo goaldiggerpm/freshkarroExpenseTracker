@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useEffect, useState } from "react"
 import { ResponsiveContainer } from "recharts"
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/hooks/use-toast"
@@ -23,6 +23,7 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
     const [edit, setedit] = useState(false)
     const [selectedData, setselectedData] = useState({})
     const [editedData, setEditedData] = useState(expensedata);
+    const router = useRouter();
 
     useEffect(() => {
         setselectedData(expensedata);
@@ -49,12 +50,13 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
             return;
         }
         setselectedData(editedData);
-        if (!edit) {
-            editExpense();
-        }
+        // if (!edit) {
+        //     editExpense();
+        // }
     }, [edit]);
 
-    async function editExpense() {
+    async function editExpense(e) {
+        e.preventDefault()
         console.log('im called expense')
         try {
             const response = await fetch('/api/data/expenses', {
@@ -71,6 +73,9 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
 
             const result = await response.json();
             console.log('Expense updated successfully:', result);
+            if (result) {
+                router.refresh();
+            }
             toast({
                 description: "Expense updated successfully"
             });
@@ -81,14 +86,29 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
     }
 
     function handleDrawerClose() {
+        console.log('state cleared')
         setedit(false);
         setselectedData({});
-        setEditedData({});
+        setEditedData({
+            expense_id: '',
+            user_id: '',
+            expense_type: '',
+            reason: '',
+            expense_date: '',
+            amount: '',
+            platform_used: '',
+            payment_reference_id: '',
+            entered_by: '',
+            updated_by: '',
+            entered_date: '',
+            updated_date: '',
+            is_deleted: false
+        });
     }
 
     return (
-        <Drawer>
-            <DrawerTrigger asChild className="hidden" ref={ref}>
+        <Drawer >
+            <DrawerTrigger asChild className="hidden" ref={ref} >
                 <Button variant="outline">Open Drawer</Button>
             </DrawerTrigger>
             <DrawerContent >
@@ -99,11 +119,11 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                     </DrawerHeader>
 
                     <div className="mt-3 h-[120px] ">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <div className="expense-container">
-                                {edit ? (
-                                    <>
-                                        <div className="text-red-400" >Editing</div>
+                        <div className="expense-container">
+                            {edit ? (
+                                <>
+                                    <div className="text-red-400" >Editing</div>
+                                    <form id="expense-form" onSubmit={editExpense}>
                                         <div>
                                             <span>Expense ID:</span> <input name="expense_id" value={editedData.expense_id} onChange={handleChange} />
                                         </div>
@@ -141,58 +161,60 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                             <span>Updated Date:</span> <input name="updated_date" value={editedData.updated_date} onChange={handleChange} />
                                         </div>
                                         <div>
-                                            <span>Is Deleted:</span> <input name="is_deleted" value={editedData.is_deleted ? 'Yes' : 'No'} onChange={handleChange} />
+                                            <span>Is Deleted:</span> <input name="is_deleted" placeholder="Type yes or no" value={editedData.is_deleted ? "Yes" : "No"} onChange={handleChange} tooltip="Say yes or no" />
                                         </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div>
-                                            <span>Expense ID:</span> {selectedData?.expense_id}
-                                        </div>
-                                        <div>
-                                            <span>User ID:</span> {selectedData?.user_id}
-                                        </div>
-                                        <div>
-                                            <span>Expense Type:</span> {selectedData?.expense_type}
-                                        </div>
-                                        <div>
-                                            <span>Reason:</span> {selectedData?.reason}
-                                        </div>
-                                        <div>
-                                            <span>Expense Date:</span> {selectedData?.expense_date}
-                                        </div>
-                                        <div>
-                                            <span>Amount:</span> {selectedData?.amount}
-                                        </div>
-                                        <div>
-                                            <span>Platform Used:</span> {selectedData?.platform_used}
-                                        </div>
-                                        <div>
-                                            <span>Payment Reference ID:</span> {selectedData?.payment_reference_id}
-                                        </div>
-                                        <div>
-                                            <span>Entered By:</span> {selectedData?.entered_by}
-                                        </div>
-                                        <div>
-                                            <span>Updated By:</span> {selectedData?.updated_by}
-                                        </div>
-                                        <div>
-                                            <span>Entered Date:</span> {selectedData?.entered_date}
-                                        </div>
-                                        <div>
-                                            <span>Updated Date:</span> {selectedData?.updated_date}
-                                        </div>
-                                        <div>
-                                            <span>Is Deleted:</span> {selectedData?.is_deleted ? 'Yes' : 'No'}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        </ResponsiveContainer>
+                                        <Button className="mt-4 hidden" type="submit">Submit</Button>
+                                    </form>
+                                </>
+                            ) : (
+                                <>
+                                    <div>
+                                        <span>Expense ID:</span> {selectedData?.expense_id}
+                                    </div>
+                                    <div>
+                                        <span>User ID:</span> {selectedData?.user_id}
+                                    </div>
+                                    <div>
+                                        <span>Expense Type:</span> {selectedData?.expense_type}
+                                    </div>
+                                    <div>
+                                        <span>Reason:</span> {selectedData?.reason}
+                                    </div>
+                                    <div>
+                                        <span>Expense Date:</span> {selectedData?.expense_date}
+                                    </div>
+                                    <div>
+                                        <span>Amount:</span> {selectedData?.amount}
+                                    </div>
+                                    <div>
+                                        <span>Platform Used:</span> {selectedData?.platform_used}
+                                    </div>
+                                    <div>
+                                        <span>Payment Reference ID:</span> {selectedData?.payment_reference_id}
+                                    </div>
+                                    <div>
+                                        <span>Entered By:</span> {selectedData?.entered_by}
+                                    </div>
+                                    <div>
+                                        <span>Updated By:</span> {selectedData?.updated_by}
+                                    </div>
+                                    <div>
+                                        <span>Entered Date:</span> {selectedData?.entered_date}
+                                    </div>
+                                    <div>
+                                        <span>Updated Date:</span> {selectedData?.updated_date}
+                                    </div>
+                                    <div>
+                                        <span>Is Deleted:</span> {selectedData?.is_deleted ? 'Yes' : 'No'}
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <DrawerFooter>
-                    <Button onClick={handleEdit}>{edit ? 'Save' : 'Edit'}</Button>
+                    {!edit && <Button onClick={handleEdit} >Edit</Button>}
+                    {edit && <Button type="submit" form="expense-form">Save</Button>}
                     <DrawerClose asChild onClick={handleDrawerClose} >
                         <Button variant="outline">Close</Button>
                     </DrawerClose>

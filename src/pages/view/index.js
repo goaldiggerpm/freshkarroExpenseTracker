@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
 import ExpenseTable from '@/components/custom/expenseTable'
 
 import "../../app/globals.css";
 import { useRouter } from 'next/router';
+import { ExpenseAddDrawer } from '@/components/custom/expenseAddDrawer';
 
 
 export default function View(props) {
@@ -28,6 +29,8 @@ export default function View(props) {
     }])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
+    const drawerTriggerRef = useRef(null)
+
 
     useEffect(() => {
         const getExpenses = async () => {
@@ -83,10 +86,17 @@ export default function View(props) {
         setPage(newPage)
     }
 
+
+    const handleRowClick = () => {
+        if (drawerTriggerRef.current) {
+            drawerTriggerRef.current.click()
+        }
+    }
+
     return (
         <div className='w-auto p-4'>
             <div className='flex justify-end items-center gap-2 p-2'>
-                <Button className="" variant='add' >Add</Button>
+                <Button className="" variant='add' onClick={handleRowClick} >Add</Button>
                 <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
             </div>
             <ExpenseTable expenses={expenses} />
@@ -107,6 +117,7 @@ export default function View(props) {
                     Next
                 </Button>
             </div>
+            <ExpenseAddDrawer ref={drawerTriggerRef} show={false} />
         </div>
     )
 }
