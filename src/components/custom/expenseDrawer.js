@@ -140,7 +140,7 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
                                             <span>Expense Date:</span>
-                                            <Input name="expense_date" value={editedData.expense_date} onChange={handleChange} />
+                                            <Input name="expense_date" value={editedData.expense_date} type='date' onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
                                             <span>Amount:</span>
