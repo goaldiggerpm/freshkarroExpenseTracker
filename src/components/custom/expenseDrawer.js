@@ -138,7 +138,7 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
                                             <span className="text-sm text-gray-700" >Amount:</span>
-                                            <Input name="amount" value={editedData.amount} onChange={handleChange} />
+                                            <Input name="amount" type="number" value={editedData.amount} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
                                             <span className="text-sm text-gray-700" >Platform Used:</span>

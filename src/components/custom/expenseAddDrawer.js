@@ -151,7 +151,7 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
                                     <span className="text-sm text-gray-700" >Amount:</span>
-                                    <Input name="amount" value={enteredData.amount} onChange={handleChange} />
+                                    <Input name="amount" type="number" value={enteredData.amount} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
                                     <span className="text-sm text-gray-700" >Platform Used:</span>
