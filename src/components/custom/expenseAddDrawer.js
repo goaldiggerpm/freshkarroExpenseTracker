@@ -123,13 +123,13 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
                 <Button variant="outline">Open Drawer</Button>
             </DrawerTrigger>
             <DrawerContent>
-                <div className="mx-auto h-full w-full max-w-sm overflow-y-auto">
+                <div className="flex flex-col items-center mx-auto h-full w-full overflow-y-auto">
                     <DrawerHeader>
                         <DrawerTitle className="text-lg">Expense Receipt</DrawerTitle>
                         <DrawerDescription className="text-lg">New Form</DrawerDescription>
                     </DrawerHeader>
 
-                    <div className="mt-3">
+                    <div className="mt-3 w-[100%] max-w-[360px] md:max-w-[600px] lg:w-[900px]">
                         <div className="expense-container">
                             <div className="text-red-400 text-lg">Adding</div>
                             <form id="expense-form" onSubmit={addExpense} className="space-y-4">

@@ -21,7 +21,7 @@ export default function View(props) {
     const [totalPages, setTotalPages] = useState(1)
     const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(true)
 
 
     useEffect(() => {

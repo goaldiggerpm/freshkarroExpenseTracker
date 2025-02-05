@@ -104,7 +104,7 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                 <Button variant="outline" className="w-[250px]">Open Drawer</Button>
             </DrawerTrigger>
             <DrawerContent >
-                <div className="mx-auto h-full w-full max-w-sm overflow-y-auto ">
+                <div className="flex flex-col items-center mx-auto h-full w-full max-w-sm overflow-y-auto ">
                     <DrawerHeader>
                         <DrawerTitle>Expense Receipt</DrawerTitle>
                         <DrawerDescription>Created by {expensedata?.user_id}</DrawerDescription>
@@ -155,15 +155,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                 <>
                                     <div className="text-lg flex flex-col m-2" >
                                         <span className="text-sm text-gray-700" >Expense ID:</span>
-                                        {/* <span ref={spanRef}  >
-                                                {selectedData?.expense_id}
-                                                <Button
-                                                    onClick={handleCopy}
-                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                >
-                                                    {copied ? 'Copied!' : 'Copy'}
-                                                </Button>
-                                            </span> */}
                                         <CopyableText text={selectedData?.expense_id} />
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
