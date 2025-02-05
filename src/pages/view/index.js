@@ -136,8 +136,8 @@ export default function View(props) {
                         {
                             !loading && <div className='w-auto p-4 font-[family-name:var(--font-geist-sans)] text-lg'>
                                 <div className='flex justify-end items-center gap-2 p-2'>
-                                    <Button className="" variant='add' onClick={handleRowClick} >Add </Button>
-                                    <Button className=" rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
+                                    <Button className="rounded-full" variant='add' onClick={handleRowClick} >Add </Button>
+                                    <Button className="rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
                                 </div>
                                 <ExpenseTable expenses={expenses} />
                                 <div className="flex justify-center items-center mt-4">

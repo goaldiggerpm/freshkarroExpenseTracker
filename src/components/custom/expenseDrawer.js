@@ -17,25 +17,23 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Input } from "../ui/input";
+import CopyableText from "./copaybleText";
 
 
 const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
-    // const [goal, setGoal] = React.useState(350)
     const [edit, setedit] = useState(false)
     const [selectedData, setselectedData] = useState({})
     const [editedData, setEditedData] = useState(expensedata);
     const router = useRouter();
+    const { toast } = useToast()
 
     useEffect(() => {
         setselectedData(expensedata);
         setEditedData(expensedata);
     }, [expensedata]);
 
-    const { toast } = useToast()
-
     function handleEdit() {
         setedit(!edit)
-        // setEditedData(selectedData)
     }
 
     function handleChange(e) {
@@ -51,9 +49,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
             return;
         }
         setselectedData(editedData);
-        // if (!edit) {
-        //     editExpense();
-        // }
     }, [edit]);
 
     async function editExpense(e) {
@@ -78,7 +73,6 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
             toast({
                 description: "Expense updated successfully"
             });
-            // handleReload();
         } catch (error) {
             console.error('Error updating expense:', error);
         }
@@ -107,7 +101,7 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
     return (
         <Drawer >
             <DrawerTrigger asChild className="hidden" ref={ref} >
-                <Button variant="outline">Open Drawer</Button>
+                <Button variant="outline" className="w-[250px]">Open Drawer</Button>
             </DrawerTrigger>
             <DrawerContent >
                 <div className="mx-auto h-full w-full max-w-sm overflow-y-auto ">
@@ -123,106 +117,86 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                                     <div className="text-red-400" >Editing</div>
                                     <form id="expense-form" onSubmit={editExpense}>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Expense ID:</span>
+                                            <span className="text-sm text-gray-700" >Expense ID:</span>
                                             <Input name="expense_id" value={editedData.expense_id} onChange={handleChange} readOnly />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>User ID:</span>
+                                            <span className="text-sm text-gray-700" >User ID:</span>
                                             <Input name="user_id" value={editedData.user_id} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Expense Type:</span>
+                                            <span className="text-sm text-gray-700" >Expense Type:</span>
                                             <Input name="expense_type" value={editedData.expense_type} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Reason:</span>
+                                            <span className="text-sm text-gray-700" >Reason:</span>
                                             <Input name="reason" value={editedData.reason} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Expense Date:</span>
+                                            <span className="text-sm text-gray-700" >Expense Date:</span>
                                             <Input name="expense_date" value={editedData.expense_date} type='date' onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Amount:</span>
+                                            <span className="text-sm text-gray-700" >Amount:</span>
                                             <Input name="amount" value={editedData.amount} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Platform Used:</span>
+                                            <span className="text-sm text-gray-700" >Platform Used:</span>
                                             <Input name="platform_used" value={editedData.platform_used} onChange={handleChange} />
                                         </div>
                                         <div className="text-lg flex flex-col m-2">
-                                            <span>Payment Reference ID:</span>
+                                            <span className="text-sm text-gray-700" >Payment Reference ID:</span>
                                             <Input name="payment_reference_id" value={editedData.payment_reference_id} onChange={handleChange} />
                                         </div>
-                                        {/* <div className="text-lg flex flex-col m-2">
-                                            <span>Entered By:</span> <input name="entered_by" value={editedData.entered_by} onChange={handleChange} />
-                                        </div>
-                                        <div className="text-lg flex flex-col m-2">
-                                            <span>Updated By:</span> <input name="updated_by" value={editedData.updated_by} onChange={handleChange} />
-                                        </div>
-                                        <div className="text-lg flex flex-col m-2">
-                                            <span>Entered Date:</span> <input name="entered_date" value={editedData.entered_date} onChange={handleChange} />
-                                        </div>
-                                        <div className="text-lg flex flex-col m-2">
-                                            <span>Updated Date:</span> <input name="updated_date" value={editedData.updated_date} onChange={handleChange} />
-                                        </div> */}
-                                        {/* <div className="text-lg flex flex-col m-2">
-                                            <span>Is Deleted:</span> <input name="is_deleted" placeholder="Type yes or no" value={editedData.is_deleted ? "Yes" : "No"} onChange={handleChange} tooltip="Say yes or no" />
-                                        </div> */}
                                         <Button className="mt-4 hidden" type="submit">Submit</Button>
                                     </form>
                                 </>
                             ) : (
                                 <>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Expense ID:</span> {selectedData?.expense_id}
+                                        <span className="text-sm text-gray-700" >Expense ID:</span>
+                                        {/* <span ref={spanRef}  >
+                                                {selectedData?.expense_id}
+                                                <Button
+                                                    onClick={handleCopy}
+                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                >
+                                                    {copied ? 'Copied!' : 'Copy'}
+                                                </Button>
+                                            </span> */}
+                                        <CopyableText text={selectedData?.expense_id} />
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>User ID:</span> {selectedData?.user_id}
+                                        <span className="text-sm text-gray-700" >User ID:</span> {selectedData?.user_id}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Expense Type:</span> {selectedData?.expense_type}
+                                        <span className="text-sm text-gray-700" >Expense Type:</span> {selectedData?.expense_type}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Reason:</span> {selectedData?.reason}
+                                        <span className="text-sm text-gray-700" >Reason:</span> {selectedData?.reason}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Expense Date:</span> {selectedData?.expense_date}
+                                        <span className="text-sm text-gray-700" >Expense Date:</span> {selectedData?.expense_date}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Amount:</span> {selectedData?.amount}
+                                        <span className="text-sm text-gray-700" >Amount:</span> {selectedData?.amount}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Platform Used:</span> {selectedData?.platform_used}
+                                        <span className="text-sm text-gray-700" >Platform Used:</span> {selectedData?.platform_used}
                                     </div>
                                     <div className="text-lg flex flex-col m-2" >
-                                        <span>Payment Reference ID:</span> {selectedData?.payment_reference_id}
+                                        <span className="text-sm text-gray-700" >Payment Reference ID:</span> {selectedData?.payment_reference_id}
                                     </div>
-                                    {/* <div className="text-lg flex flex-col m-2" >
-                                        <span>Entered By:</span> {selectedData?.entered_by}
-                                    </div>
-                                    <div className="text-lg flex flex-col m-2" >
-                                        <span>Updated By:</span> {selectedData?.updated_by}
-                                    </div>
-                                    <div className="text-lg flex flex-col m-2" >
-                                        <span>Entered Date:</span> {selectedData?.entered_date}
-                                    </div>
-                                    <div className="text-lg flex flex-col m-2" >
-                                        <span>Updated Date:</span> {selectedData?.updated_date}
-                                    </div> */}
-                                    {/* <div className="text-lg flex flex-col m-2" >
-                                        <span>Is Deleted:</span> {selectedData?.is_deleted ? 'Yes' : 'No'}
-                                    </div> */}
                                 </>
                             )}
                         </div>
                     </div>
                 </div>
                 <DrawerFooter>
-                    {!edit && <Button onClick={handleEdit} >Edit</Button>}
-                    {edit && <Button type="submit" form="expense-form">Save</Button>}
+                    {!edit && <Button onClick={handleEdit} className="w-[360px] m-auto">Edit</Button>}
+                    {edit && <Button type="submit" form="expense-form" className="w-[360px] m-auto">Save</Button>}
                     <DrawerClose asChild onClick={handleDrawerClose} >
-                        <Button variant="outline">Close</Button>
+                        <Button variant="outline" className="w-[360px] m-auto">Close</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

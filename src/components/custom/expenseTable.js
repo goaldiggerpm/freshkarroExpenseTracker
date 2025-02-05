@@ -13,48 +13,41 @@ import {
 import { ExpenseDrawer } from './expenseDrawer'
 
 const ExpenseTable = ({ expenses }) => {
-    // const { user_id, expense_date, amount, expense_type } = expenses
-
-    const [expenseData, setExpenseData] = useState(expenses)
     const [selectedExpense, setselectedExpense] = useState({})
 
     const drawerTriggerRef = useRef(null)
 
     const handleRowClick = (expense) => {
         setselectedExpense(expense)
-        if (drawerTriggerRef.current) {
-            drawerTriggerRef.current.click()
-        }
+        setTimeout(() => {
+            if (drawerTriggerRef.current) {
+                drawerTriggerRef.current.click()
+            }
+        }, 0)
     }
 
     return (
         <div>
-            <Table className="">
-                {/* <TableCaption className="mt-4 text-sm text-muted-foreground" >A list of your recent invoices.</TableCaption>  */}
-                <TableHeader className="[&_tr]:border-b" >
+            <Table className="max-w-[400px] md:max-w-[500px] lg:w-[900px]">
+                <TableHeader className="[&_tr]:border-b"></TableHeader>
+                <TableHeader className="[&_tr]:border-b w-full">
                     <TableRow className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                        <TableHead className="w-[100px]">User ID</TableHead>
-                        <TableHead>Exp Date</TableHead>
-                        <TableHead>Exp Type</TableHead>
-                        <TableHead className="text-right">Amount ₹</TableHead>
+                        <TableHead className="w-[25%] align-top">User ID</TableHead>
+                        <TableHead className="w-[25%] align-top">Exp Date</TableHead>
+                        <TableHead className="w-[25%] align-top">Exp Type</TableHead>
+                        <TableHead className="w-[25%] text-right align-top">Amnt ₹</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {expenses.map((expense) => (
-                        <TableRow key={`row-${expense.expense_id}`} onClick={() => handleRowClick(expense)} >
-                            <TableCell className="font-medium">{expense.user_id}</TableCell>
-                            <TableCell >{expense.expense_date}</TableCell>
-                            <TableCell >{expense.expense_type}</TableCell>
-                            <TableCell className="text-right">{expense.amount}</TableCell>
+                        <TableRow className="cursor-pointer" key={`row-${expense.expense_id}`} onClick={() => handleRowClick(expense)}>
+                            <TableCell className="font-medium truncate">{expense.user_id}</TableCell>
+                            <TableCell className="truncate">{expense.expense_date}</TableCell>
+                            <TableCell className="truncate">{expense.expense_type}</TableCell>
+                            <TableCell className="text-right truncate">{expense.amount}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
-                {/* <TableFooter>
-                    <TableRow>
-                        <TableCell colSpan={3}>Total</TableCell>
-                        <TableCell className="text-right">₹2,500.00</TableCell>
-                    </TableRow>
-                </TableFooter> */}
             </Table>
             <ExpenseDrawer ref={drawerTriggerRef} expensedata={selectedExpense} show={false} />
         </div>

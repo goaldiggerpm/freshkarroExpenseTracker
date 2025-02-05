@@ -133,67 +133,43 @@ const ExpenseAddDrawer = forwardRef((props, ref) => {
                         <div className="expense-container">
                             <div className="text-red-400 text-lg">Adding</div>
                             <form id="expense-form" onSubmit={addExpense} className="space-y-4">
-                                {/* <div className="text-lg flex flex-col m-2">
-                                    <span>Expense ID:</span>
-                                    <Input name="expense_id" value={enteredData.expense_id} onChange={handleChange} />
-                                </div> */}
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>User ID:</span>
+                                    <span className="text-sm text-gray-700" >User ID:</span>
                                     <Input name="user_id" value={enteredData.user_id} onChange={handleChange} readOnly />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Expense Type:</span>
+                                    <span className="text-sm text-gray-700" >Expense Type:</span>
                                     <Input name="expense_type" value={enteredData.expense_type} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Reason:</span>
+                                    <span className="text-sm text-gray-700" >Reason:</span>
                                     <Input name="reason" value={enteredData.reason} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Expense Date:</span>
+                                    <span className="text-sm text-gray-700" >Expense Date:</span>
                                     <Input name="expense_date" type="date" value={enteredData.expense_date} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Amount:</span>
+                                    <span className="text-sm text-gray-700" >Amount:</span>
                                     <Input name="amount" value={enteredData.amount} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Platform Used:</span>
+                                    <span className="text-sm text-gray-700" >Platform Used:</span>
                                     <Input name="platform_used" value={enteredData.platform_used} onChange={handleChange} />
                                 </div>
                                 <div className="text-lg flex flex-col m-2">
-                                    <span>Payment Reference ID:</span>
+                                    <span className="text-sm text-gray-700" >Payment Reference ID:</span>
                                     <Input name="payment_reference_id" value={enteredData.payment_reference_id} onChange={handleChange} />
                                 </div>
-                                {/* <div className="text-lg flex flex-col">
-                                    <span>Entered By:</span>
-                                    <input name="entered_by" value={enteredData.entered_by} onChange={handleChange} />
-                                </div>
-                                <div className="text-lg flex flex-col">
-                                    <span>Updated By:</span>
-                                    <input name="updated_by" value={enteredData.updated_by} onChange={handleChange} />
-                                </div>
-                                <div className="text-lg flex flex-col">
-                                    <span>Entered Date:</span>
-                                    <input name="entered_date" value={enteredData.entered_date} onChange={handleChange} />
-                                </div>
-                                <div className="text-lg flex flex-col">
-                                    <span>Updated Date:</span>
-                                    <input name="updated_date" value={enteredData.updated_date} onChange={handleChange} />
-                                </div>
-                                <div className="text-lg flex flex-col">
-                                    <span>Is Deleted:</span>
-                                    <input name="is_deleted" value={enteredData.is_deleted} placeholder="Type yes or no" onChange={handleChange} />
-                                </div> */}
                                 <Button className="mt-4 hidden" type="submit">Submit</Button>
                             </form>
                         </div>
                     </div>
                 </div>
                 <DrawerFooter>
-                    <Button type="submit" form="expense-form">Save</Button>
+                    <Button type="submit" form="expense-form" className="w-[360px] m-auto">Save</Button>
                     <DrawerClose asChild onClick={handleDrawerClose}>
-                        <Button variant="outline">Close</Button>
+                        <Button variant="outline" className="w-[360px] m-auto">Close</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
