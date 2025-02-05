@@ -42,10 +42,10 @@ const ExpenseTable = ({ expenses }) => {
                 <TableBody>
                     {expenses.map((expense) => (
                         <TableRow key={`row-${expense.expense_id}`} onClick={() => handleRowClick(expense)} >
-                            <TableCell key={`user-${expense.expense_id}`} className="font-medium">{expense.user_id}</TableCell>
-                            <TableCell key={`date-${expense.expense_id}`}>{expense.expense_date}</TableCell>
-                            <TableCell key={`type-${expense.expense_id}`}>{expense.expense_type}</TableCell>
-                            <TableCell key={`amount-${expense.expense_id}`} className="text-right">{expense.amount}</TableCell>
+                            <TableCell className="font-medium">{expense.user_id}</TableCell>
+                            <TableCell >{expense.expense_date}</TableCell>
+                            <TableCell >{expense.expense_type}</TableCell>
+                            <TableCell className="text-right">{expense.amount}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

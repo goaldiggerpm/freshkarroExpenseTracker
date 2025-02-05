@@ -10,9 +10,9 @@ export async function GET(req, res) {
     const start = (page - 1) * limit;
     const end = start + limit - 1;
 
-    // const cookieStore = await cookies();
-    // const sessionCookie = cookieStore.get('session');
-    // const username = sessionCookie ? JSON.parse(sessionCookie.value).username : null;
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get('session');
+    const username = sessionCookie ? JSON.parse(sessionCookie.value).username : null;
     // if (!username) {
     //     return NextResponse.redirect(new URL('/', req.url));
     // }
