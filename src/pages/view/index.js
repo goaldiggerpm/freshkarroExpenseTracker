@@ -11,6 +11,7 @@ import { ExpenseAddDrawer } from '@/components/custom/expenseAddDrawer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/components/hooks/use-toast';
 import { CircleLoader } from '@/components/custom/circleLoader';
+import debounce from '@/utils/debounce';
 
 
 export default function View(props) {
@@ -38,6 +39,33 @@ export default function View(props) {
         getExpenses()
     }, [page])
 
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch('/api/auth/check-session', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+
+                if (!response.ok) {
+                    toast('Session expired, please login again')
+                }
+
+                const result = await response.json()
+
+                if (!result.session) {
+                    toast('Session expired, please login again')
+                    router.push('/')
+                }
+            } catch (error) {
+                console.error('Error checking session:', error)
+                toast('Error checking session, please login again')
+                router.push('/')
+            }
+        }
+
+        checkSession()
+    }, [])
 
     async function fetchExpenses() {
         try {
@@ -88,10 +116,9 @@ export default function View(props) {
         }
     }
 
-    const handlePageChange = (newPage) => {
+    const handlePageChange = debounce((newPage) => {
         setPage(newPage)
-    }
-
+    }, 300)
 
     const handleRowClick = () => {
         if (drawerTriggerRef.current) {
