@@ -30,7 +30,7 @@ const ExpenseTable = ({ expenses }) => {
     return (
         <div>
             <Table className="">
-                {/* <TableCaption className="mt-4 text-sm text-muted-foreground" >A list of your recent invoices.</TableCaption> */}
+                {/* <TableCaption className="mt-4 text-sm text-muted-foreground" >A list of your recent invoices.</TableCaption>  */}
                 <TableHeader className="[&_tr]:border-b" >
                     <TableRow className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                         <TableHead className="w-[100px]">User ID</TableHead>
@@ -41,11 +41,11 @@ const ExpenseTable = ({ expenses }) => {
                 </TableHeader>
                 <TableBody>
                     {expenses.map((expense) => (
-                        <TableRow key={expense.expense_id} onClick={() => handleRowClick(expense)} >
-                            <TableCell className="font-medium">{expense.user_id}</TableCell>
-                            <TableCell>{expense.expense_date}</TableCell>
-                            <TableCell>{expense.expense_type}</TableCell>
-                            <TableCell className="text-right">{expense.amount}</TableCell>
+                        <TableRow key={`row-${expense.expense_id}`} onClick={() => handleRowClick(expense)} >
+                            <TableCell key={`user-${expense.expense_id}`} className="font-medium">{expense.user_id}</TableCell>
+                            <TableCell key={`date-${expense.expense_id}`}>{expense.expense_date}</TableCell>
+                            <TableCell key={`type-${expense.expense_id}`}>{expense.expense_type}</TableCell>
+                            <TableCell key={`amount-${expense.expense_id}`} className="text-right">{expense.amount}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
