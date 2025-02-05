@@ -104,13 +104,13 @@ const ExpenseDrawer = forwardRef(({ expensedata }, ref) => {
                 <Button variant="outline" className="w-[250px]">Open Drawer</Button>
             </DrawerTrigger>
             <DrawerContent >
-                <div className="flex flex-col items-center mx-auto h-full w-full max-w-sm overflow-y-auto ">
+                <div className="flex flex-col items-center  h-full overflow-y-auto ">
                     <DrawerHeader>
                         <DrawerTitle>Expense Receipt</DrawerTitle>
                         <DrawerDescription>Created by {expensedata?.user_id}</DrawerDescription>
                     </DrawerHeader>
 
-                    <div className="mt-3 h-[120px] ">
+                    <div className="mt-3 h-[120px] w-[100%] max-w-[360px] md:max-w-[600px] lg:w-[900px] ">
                         <div className="expense-container">
                             {edit ? (
                                 <>
