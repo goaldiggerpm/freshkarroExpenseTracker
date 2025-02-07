@@ -1,38 +1,37 @@
 "use client"
 
 import React, { useEffect, useState, useRef } from 'react'
-
 import { Button } from '@/components/ui/button'
 import ExpenseTable from '@/components/custom/expenseTable'
-
 import "../../app/globals.css";
 import { useRouter } from 'next/router';
 import { ExpenseAddDrawer } from '@/components/custom/expenseAddDrawer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { toast } from '@/components/hooks/use-toast';
+import { toast } from 'sonner';
 import { CircleLoader } from '@/components/custom/circleLoader';
 import debounce from '@/utils/debounce';
 
-
 export default function View(props) {
     const router = useRouter()
-    const [expenses, setExpenses] = useState([{}])
+    const [expenses, setExpenses] = useState([])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
-    const [loading, setloading] = useState(true)
-
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const getExpenses = async () => {
-            const { data, page: currentPage, totalPages: total, username } = await fetchExpenses(page)
-            setUserName(username)
-            setExpenses(data)
-            setPage(currentPage)
-            setTotalPages(total)
-            if (username === '' || username === null || username === undefined) {
-                await handleLogout('login')
+            const result = await fetchExpenses(page)
+            if (result) {
+                const { data, page: currentPage, totalPages: total, username } = result
+                setUserName(username)
+                setExpenses(data)
+                setPage(currentPage)
+                setTotalPages(total)
+                if (!username) {
+                    await handleLogout('login')
+                }
             }
         }
 
@@ -48,18 +47,18 @@ export default function View(props) {
                 })
 
                 if (!response.ok) {
-                    toast('Session expired, please login again')
+                    toast.error('Session expired, please login again')
                 }
 
                 const result = await response.json()
 
                 if (!result.session) {
-                    toast('Session expired, please login again')
+                    toast.error('Session expired, please login again')
                     router.push('/')
                 }
             } catch (error) {
                 console.error('Error checking session:', error)
-                toast('Error checking session, please login again')
+                toast.error('Error checking session, please login again')
                 router.push('/')
             }
         }
@@ -67,20 +66,20 @@ export default function View(props) {
         checkSession()
     }, [])
 
-    async function fetchExpenses() {
+    async function fetchExpenses(page) {
         try {
             const response = await fetch(`/api/data/expenses?page=${page}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
-            setloading(true)
+            setLoading(true)
             if (!response.ok) {
                 throw new Error('Failed to fetch expenses')
             }
 
             const data = await response.json()
             setTimeout(() => {
-                setloading(false)
+                setLoading(false)
             }, 100);
             return data
         } catch (error) {
@@ -103,7 +102,7 @@ export default function View(props) {
             const result = await response.json()
 
             if (val === 'login') {
-                toast('Please login to view expenses')
+                toast.error('Please login to view expenses')
                 router.push(result.redirectTo)
                 return
             }
@@ -117,7 +116,9 @@ export default function View(props) {
     }
 
     const handlePageChange = debounce((newPage) => {
-        setPage(newPage)
+        if (newPage > 0 && newPage <= totalPages) {
+            setPage(newPage)
+        }
     }, 300)
 
     const handleRowClick = () => {
