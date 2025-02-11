@@ -78,9 +78,9 @@ export default function View(props) {
             }
 
             const data = await response.json()
-            setTimeout(() => {
-                setLoading(false)
-            }, 100);
+            // setTimeout(() => {
+            setLoading(false)
+            // }, 100);
             return data
         } catch (error) {
             console.error('Error fetching expenses:', error)
@@ -140,7 +140,7 @@ export default function View(props) {
                                     <Button className="rounded-full" variant='add' onClick={handleRowClick} >Add </Button>
                                     <Button className="rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
                                 </div>
-                                <ExpenseTable expenses={expenses} />
+                                <ExpenseTable loading={loading} expenses={expenses} />
                                 <div className="flex justify-center items-center mt-4">
                                     <Button
                                         className="rounded-full"
