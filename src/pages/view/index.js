@@ -51,7 +51,7 @@ export default function View(props) {
                 setPage(currentPage)
                 setTotalPages(total)
                 if (!username) {
-                    // await handleLogout('login')
+                    await handleLogout('login')
                 }
             }
         }
