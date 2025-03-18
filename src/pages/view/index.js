@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import ExpenseTable from '@/components/custom/expenseTable'
 import "../../app/globals.css";
@@ -19,6 +19,26 @@ export default function View(props) {
     const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
     const [loading, setLoading] = useState(true)
+
+    const fetchExpenses = useCallback(async (page) => {
+        try {
+            const response = await fetch(`/api/data/expenses?page=${page}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            setLoading(true)
+            if (!response.ok) {
+                throw new Error('Failed to fetch expenses')
+            }
+
+            const data = await response.json()
+            setLoading(false)
+            return data
+        } catch (error) {
+            console.error('Error fetching expenses:', error)
+            return { data: [], page: 1, totalPages: 1, username }
+        }
+    }, [])
 
     useEffect(() => {
         const getExpenses = async () => {
@@ -64,31 +84,31 @@ export default function View(props) {
         }
 
         checkSession()
-    }, [])
+    },)
 
-    async function fetchExpenses(page) {
-        try {
-            const response = await fetch(`/api/data/expenses?page=${page}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            setLoading(true)
-            if (!response.ok) {
-                throw new Error('Failed to fetch expenses')
-            }
+    // async function fetchExpenses(page) {
+    //     try {
+    //         const response = await fetch(`/api/data/expenses?page=${page}`, {
+    //             method: 'GET',
+    //             headers: { 'Content-Type': 'application/json' }
+    //         })
+    //         setLoading(true)
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch expenses')
+    //         }
 
-            const data = await response.json()
-            // setTimeout(() => {
-            setLoading(false)
-            // }, 100);
-            return data
-        } catch (error) {
-            console.error('Error fetching expenses:', error)
-            return { data: [], page: 1, totalPages: 1, username }
-        }
-    }
+    //         const data = await response.json()
+    //         // setTimeout(() => {
+    //         setLoading(false)
+    //         // }, 100);
+    //         return data
+    //     } catch (error) {
+    //         console.error('Error fetching expenses:', error)
+    //         return { data: [], page: 1, totalPages: 1, username }
+    //     }
+    // }
 
-    const handleLogout = async (val) => {
+    const handleLogout = useCallback(async (val) => {
         try {
             const response = await fetch('/api/auth/logout', {
                 method: 'POST',
@@ -113,7 +133,7 @@ export default function View(props) {
             console.error('Logout error:', error)
             // Handle error (show toast, error message, etc)
         }
-    }
+    },)
 
     const handlePageChange = debounce((newPage) => {
         if (newPage > 0 && newPage <= totalPages) {
