@@ -19,6 +19,7 @@ export default function View(props) {
     const [username, setUserName] = useState('')
     const drawerTriggerRef = useRef(null)
     const [loading, setLoading] = useState(true)
+    const hasRun = useRef(false);
 
     const fetchExpenses = useCallback(async (page) => {
         try {
@@ -58,33 +59,63 @@ export default function View(props) {
         getExpenses()
     }, [page])
 
-    useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const response = await fetch('/api/auth/check-session', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                })
+    const checkSession = async () => {
+        try {
+            const response = await fetch('/api/auth/check-session', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
 
-                if (!response.ok) {
-                    toast.error('Session expired, please login again')
-                }
+            if (!response.ok) {
+                toast.error('Session expired, please login again')
+            }
 
-                const result = await response.json()
+            const result = await response.json()
 
-                if (!result.session) {
-                    toast.error('Session expired, please login again')
-                    router.push('/')
-                }
-            } catch (error) {
-                console.error('Error checking session:', error)
-                toast.error('Error checking session, please login again')
+            if (!result.session) {
+                toast.error('Session expired, please login again')
                 router.push('/')
             }
+        } catch (error) {
+            console.error('Error checking session:', error)
+            toast.error('Error checking session, please login again')
+            router.push('/')
         }
+    }
 
+    if (!hasRun.current) {
         checkSession()
-    },)
+        hasRun.current = true;
+    }
+
+
+    // useEffect(() => {
+    //     const checkSession = async () => {
+    //         try {
+    //             const response = await fetch('/api/auth/check-session', {
+    //                 method: 'GET',
+    //                 headers: { 'Content-Type': 'application/json' }
+    //             })
+
+    //             if (!response.ok) {
+    //                 toast.error('Session expired, please login again')
+    //             }
+
+    //             const result = await response.json()
+
+    //             if (!result.session) {
+    //                 toast.error('Session expired, please login again')
+    //                 router.push('/')
+    //             }
+    //         } catch (error) {
+    //             console.error('Error checking session:', error)
+    //             toast.error('Error checking session, please login again')
+    //             router.push('/')
+    //         }
+    //     }
+
+    //     checkSession()
+    // },)
 
     // async function fetchExpenses(page) {
     //     try {
