@@ -45,11 +45,12 @@ export default function View(props) {
         const getExpenses = async () => {
             const result = await fetchExpenses(page)
             if (result) {
-                const { data, page, totalPages: total, username } = result
+                const { data, page: currentPage, totalPages: total, username } = result
                 setUserName(username)
-                console.log("new data", data)
                 setExpenses(data)
-                // setPage(page)
+                if (page !== currentPage) {
+                    setPage(currentPage)
+                }
                 setTotalPages(total)
                 if (!username) {
                     // await handleLogout('login')
