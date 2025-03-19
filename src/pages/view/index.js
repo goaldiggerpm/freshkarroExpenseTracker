@@ -59,7 +59,7 @@ export default function View(props) {
         }
 
         getExpenses()
-    }, [page])
+    }, [page, fetchExpenses])
 
     const checkSession = async () => {
         try {
