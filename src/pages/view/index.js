@@ -45,8 +45,9 @@ export default function View(props) {
         const getExpenses = async () => {
             const result = await fetchExpenses(page)
             if (result) {
-                const { data, page: page, totalPages: total, username } = result
+                const { data, page, totalPages: total, username } = result
                 setUserName(username)
+                console.log("new data", data)
                 setExpenses(data)
                 // setPage(page)
                 setTotalPages(total)
@@ -192,7 +193,7 @@ export default function View(props) {
                                     <Button className="rounded-full" variant='add' onClick={handleRowClick} >Add </Button>
                                     <Button className="rounded-full" variant='secondary' onClick={handleLogout}>Logout</Button>
                                 </div>
-                                <ExpenseTable loading={loading} expenses={expenses} />
+                                <ExpenseTable loading={loading} expenses={expenses} page={page} />
                                 <div className="flex justify-center items-center mt-4">
                                     <Button
                                         className="rounded-full"

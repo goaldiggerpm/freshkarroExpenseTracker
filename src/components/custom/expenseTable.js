@@ -12,7 +12,9 @@ import {
 } from "@/components/ui/table"
 import { ExpenseDrawer } from './expenseDrawer'
 
-const ExpenseTable = ({ expenses }) => {
+const ExpenseTable = ({ expenses, page }) => {
+    console.log("expenses got:", expenses)
+    console.log("page got:", page)
     const [selectedExpense, setselectedExpense] = useState({})
 
     const drawerTriggerRef = useRef(null)
