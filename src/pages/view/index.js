@@ -167,6 +167,7 @@ export default function View(props) {
     },)
 
     const handlePageChange = debounce((newPage) => {
+        console.log('newPage:', newPage)
         if (newPage > 0 && newPage <= totalPages) {
             setPage(newPage)
         }
