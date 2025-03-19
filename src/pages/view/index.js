@@ -61,85 +61,36 @@ export default function View(props) {
         getExpenses()
     }, [page, fetchExpenses])
 
-    const checkSession = async () => {
-        try {
-            const response = await fetch('/api/auth/check-session', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            })
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch('/api/auth/check-session', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                })
 
-            if (!response.ok) {
-                toast.error('Session expired, please login again')
-            }
+                if (!response.ok) {
+                    toast.error('Session expired, please login again')
+                }
 
-            const result = await response.json()
+                const result = await response.json()
 
-            if (!result.session) {
-                toast.error('Session expired, please login again')
+                if (!result.session) {
+                    toast.error('Session expired, please login again')
+                    router.push('/')
+                }
+            } catch (error) {
+                console.error('Error checking session:', error)
+                toast.error('Error checking session, please login again')
                 router.push('/')
             }
-        } catch (error) {
-            console.error('Error checking session:', error)
-            toast.error('Error checking session, please login again')
-            router.push('/')
         }
-    }
 
-    if (!hasRun.current) {
-        checkSession()
-        hasRun.current = true;
-    }
-
-
-    // useEffect(() => {
-    //     const checkSession = async () => {
-    //         try {
-    //             const response = await fetch('/api/auth/check-session', {
-    //                 method: 'GET',
-    //                 headers: { 'Content-Type': 'application/json' }
-    //             })
-
-    //             if (!response.ok) {
-    //                 toast.error('Session expired, please login again')
-    //             }
-
-    //             const result = await response.json()
-
-    //             if (!result.session) {
-    //                 toast.error('Session expired, please login again')
-    //                 router.push('/')
-    //             }
-    //         } catch (error) {
-    //             console.error('Error checking session:', error)
-    //             toast.error('Error checking session, please login again')
-    //             router.push('/')
-    //         }
-    //     }
-
-    //     checkSession()
-    // },)
-
-    // async function fetchExpenses(page) {
-    //     try {
-    //         const response = await fetch(`/api/data/expenses?page=${page}`, {
-    //             method: 'GET',
-    //             headers: { 'Content-Type': 'application/json' }
-    //         })
-    //         setLoading(true)
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch expenses')
-    //         }
-
-    //         const data = await response.json()
-    //         // setTimeout(() => {
-    //         setLoading(false)
-    //         // }, 100);
-    //         return data
-    //     } catch (error) {
-    //         console.error('Error fetching expenses:', error)
-    //         return { data: [], page: 1, totalPages: 1, username }
-    //     }
-    // }
+        if (!hasRun.current) {
+            checkSession()
+            hasRun.current = true;
+        }
+    }, [router])
 
     const handleLogout = useCallback(async (val) => {
         try {
